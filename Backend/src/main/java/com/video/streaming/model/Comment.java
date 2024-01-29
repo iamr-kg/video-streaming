@@ -1,18 +1,35 @@
 package com.video.streaming.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+import java.time.LocalDateTime;
+
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "comment")
 public class Comment {
     @Id
-    private String id;
+    @GeneratedValue(strategy = SEQUENCE, generator = "video_app_generator")
+    @SequenceGenerator(name = "video_app_generator", initialValue = 3, allocationSize = 25)
+    @Column(name = "comment_id")
+    private long id;
+    @Column(name = "text")
     private String text;
-    private String authorId;
-    private Integer like;
-    private Integer dislike;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "video_id", referencedColumnName = "video_id")
+    private Video video;
+    @Column(name = "reaction")
+    private String reaction;
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
 }
