@@ -18,3 +18,7 @@
 
 1. User can Login/Logout using Single Sign On
 
+DB Diagaram: 
+
+![VIdeo Streaming app](https://github.com/iamr-kg/video-streaming/assets/129980069/97c66fd5-954a-4ef5-b2d9-dfb25455af41)
+
