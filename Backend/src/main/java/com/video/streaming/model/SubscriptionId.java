@@ -1,17 +1,16 @@
 package com.video.streaming.model;
 
-import com.video.streaming.model.User;
-import jakarta.persistence.Column;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 @Embeddable
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubscriptionId implements Serializable {
     @ManyToOne
     @JoinColumn(name="subscriber_id")

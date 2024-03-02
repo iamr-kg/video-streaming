@@ -1,24 +1,24 @@
 package com.video.streaming.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name ="subscription")
-@Getter
-@Setter
+@Table(name = "subscription")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Subscription {
     @EmbeddedId
     private SubscriptionId user;
 
-    @Column(name ="is_active")
-    private String isActive;
+    @Column(name = "is_active")
+    private boolean isActive;
 
-    @Column(name="createdAt")
+    @Column(name = "createdAt")
     private LocalDateTime createdAt;
 
 }

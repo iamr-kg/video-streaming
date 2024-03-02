@@ -5,19 +5,12 @@ import lombok.*;
 
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
-
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name="video")
-@Getter
-@Setter
 @Embeddable
+@Data
 public class Video implements Serializable {
     @Id
     @GeneratedValue(strategy = SEQUENCE,generator = "video_app_generator")
@@ -34,6 +27,7 @@ public class Video implements Serializable {
     private String videoUrl;
     @Column(name="thumbnail_url")
     private String thumbnailUrl;
+
     private String tags;
     @Column(name="video_status")
     private String videoStatus;

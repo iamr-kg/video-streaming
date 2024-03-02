@@ -1,25 +1,16 @@
 package com.video.streaming.model;
-
-import com.video.streaming.repository.VideoRepository;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
+import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.List;
-import java.util.Set;
+
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name="user")
 @Embeddable
@@ -43,6 +34,12 @@ public class User implements Serializable {
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "user")
     private List<Video> video;
+    @Column(name="sub")
+    private String sub;
+    @Column(name="full_name")
+    private String fullName;
+    private String picture;
+
 
     @Override
     public boolean equals(Object o){

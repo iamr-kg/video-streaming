@@ -1,12 +1,10 @@
 package com.video.streaming.service.serviceimpl;
 
-import com.amazonaws.SdkClientException;
+
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
+
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
 import com.video.streaming.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -15,10 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Date;
 
 @Service
@@ -30,7 +26,7 @@ public class S3Service implements StorageService {
     private final AmazonS3 s3Client;
 
     @Override
-    public String uploadVideo(MultipartFile multipartfile)  {
+    public String uploadFile(MultipartFile multipartfile)  {
         File file = new File(multipartfile.getOriginalFilename());
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             fileOutputStream.write(multipartfile.getBytes());
@@ -44,6 +40,7 @@ public class S3Service implements StorageService {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(FilenameUtils.getExtension(multipartfile.getOriginalFilename()));
             metadata.addUserMetadata("Title", "File Upload - " + fileName);
+            metadata.setContentType(multipartfile.getContentType());
             metadata.setContentLength(file.length());
             request.setMetadata(metadata);
             s3Client.putObject(request);
