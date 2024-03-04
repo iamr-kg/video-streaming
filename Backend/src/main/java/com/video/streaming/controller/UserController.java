@@ -2,6 +2,7 @@ package com.video.streaming.controller;
 
 import com.video.streaming.dto.AuthUserDto;
 import com.video.streaming.dto.ReactionCount;
+import com.video.streaming.dto.VideoDto;
 import com.video.streaming.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("vsa/users/")
@@ -58,4 +61,15 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
         }
     }
+
+    @GetMapping("userHistory")
+    public ResponseEntity<List<VideoDto>> getUserHistory(){
+        try{
+            List<VideoDto> userHistory = userService.getUserHistory();
+            return new ResponseEntity<>(userHistory,HttpStatus.CREATED);
+        }catch(Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        }
+    }
+
 }

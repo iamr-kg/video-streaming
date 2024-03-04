@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class VideoService  {
@@ -93,5 +96,9 @@ public class VideoService  {
 
         WatchHistory wh = new WatchHistory(primary);
         watchHistoryRepository.save(wh);
+    }
+
+    public List<VideoDto> getAllVideos() {
+        return this.videoRepository.findAll().stream().map(video-> modelMapper.map(video,VideoDto.class)).toList();
     }
 }

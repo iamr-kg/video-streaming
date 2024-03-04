@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -28,8 +29,24 @@ public class Comment {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
     private Video video;
-    @Column(name = "reaction")
-    private String reaction;
+    private AtomicInteger likeCount;
+    private AtomicInteger dislikeCount;
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
+
+    public void incrementLikes() {
+        likeCount.incrementAndGet();
+    }
+
+    public void decrementLikes() {
+        likeCount.decrementAndGet();
+    }
+
+    public void incrementDisLikes() {
+        dislikeCount.incrementAndGet();
+    }
+
+    public void decrementDisLikes() {
+        dislikeCount.decrementAndGet();
+    }
 }

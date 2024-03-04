@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VideoReaction {
-    @EmbeddedId()
+    @EmbeddedId
     private VideoUserCompositeId id;
     @Column(name = "video_reaction")
     private int videoReaction;

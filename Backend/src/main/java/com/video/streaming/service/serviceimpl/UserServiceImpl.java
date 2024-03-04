@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.video.streaming.dto.AuthUserDto;
 import com.video.streaming.dto.ReactionCount;
 import com.video.streaming.dto.ReactionType;
+import com.video.streaming.dto.VideoDto;
 import com.video.streaming.model.*;
-import com.video.streaming.repository.SubscriptionRepository;
-import com.video.streaming.repository.UserRepository;
-import com.video.streaming.repository.VideoReactionRepository;
-import com.video.streaming.repository.VideoRepository;
+import com.video.streaming.repository.*;
 import com.video.streaming.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,6 +21,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final VideoRepository videoRepository;
     private final VideoReactionRepository videoReactionRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final WatchHistoryRepository watchHistoryRepository;
+    private final ModelMapper modelMapper;
     private final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
             .build();
@@ -125,5 +128,20 @@ public class UserServiceImpl implements UserService {
         }catch(Exception e){
             throw new RuntimeException("Exception Occurred when validating user");
         }
+    }
+
+    @Override
+    public List<VideoDto> getUserHistory() {
+        User user = getCurrentUser();
+        List<WatchHistory> userHistory = watchHistoryRepository.findByIdUserId(user.getId());
+
+        if(userHistory.isEmpty()){
+            return new ArrayList<>();
+        }
+
+        return userHistory.stream().map(watchHistory -> {
+            Video watchHistoryVideo = watchHistory.getId().getVideo();
+            return modelMapper.map(watchHistoryVideo,VideoDto.class);
+        }).toList();
     }
 }
