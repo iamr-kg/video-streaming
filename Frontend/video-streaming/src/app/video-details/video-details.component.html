@@ -1,0 +1,61 @@
+<div class="flexLayout">
+  <div class="flexItem" style="width: 20%">Border</div>
+  <div class="flexItem" style="width: 40%">
+    <div class="mat-title">Add Video Metadata</div>
+    <form #form="ngForm"[formGroup]="saveVideoDetailsFrom">
+      <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input matInput required [formControl]="title" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea matInput required [formControl]="description"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Video Status</mat-label>
+        <mat-select [formControl]="videoStatus">
+          <mat-option value="PUBLIC">Public</mat-option>
+          <mat-option value="PRIVATE">Private</mat-option>
+        </mat-select>
+      </mat-form-field>
+    <mat-form-field class="example-chip-list" appearance="fill">
+      <mat-label>Tags</mat-label>
+      <mat-chip-list #chipList aria-label="Tag selection">
+        <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+          {{ tag }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input
+          placeholder="tags..."
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)"
+        />
+      </mat-chip-list>
+    </mat-form-field>
+    <div>
+        <button class="file-upload-button">
+            <input type="file"
+            
+            (change)="onThumbnailFileSelect($event.target)"
+            />
+        </button> 
+        <ng-container *ngIf="file">
+        <span class="file-info">{{ fileInfo }}</span>
+        <br>
+        <button mat-raised-button color="primary" (click)="onThumbnailUpload()">Upload</button>
+    </ng-container>
+    </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="saveVideoDetails()">Save</button>
+      </div>
+    </form>
+  </div>
+  <div class="flexItem" style="width: 40%">
+    <app-video-player [videoUrl]="videoUrl"></app-video-player>
+</div>
+  <div class="flexItem" style="width: 20%">Border</div>
+</div>

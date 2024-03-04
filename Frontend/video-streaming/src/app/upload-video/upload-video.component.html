@@ -1,0 +1,34 @@
+<div style="padding: 15px">
+  <div>
+    <div
+      class="dropzone"
+      appFileDragNDrop
+      (filesChangeEmiter)="onFileChange($event)"
+    >
+      <div class="text-wrapper">
+        <div class="centered">
+          <input
+            type="file"
+            name="file"
+            id="file"
+            (change)="onFileChange($event)"
+          />
+          <label for="file"
+            ><mat-icon class="material-symbols-outlined"> upload_file</mat-icon
+            ><span>Select your file</span> or Drop it here!</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3 mat-subheader>Files</h3>
+  <div *ngIf="isValidFile" class="row fileItem">
+    <div class="col-sm-12 fileItemIconDiv" (click)="uploadVideo(file)">
+      <mat-icon class="material-symbols-outlined"> upload_file </mat-icon>
+      <mat-icon class="material-symbols-outlined"> close</mat-icon>
+    </div>
+    <div class="col-sm-12 fileItemText">
+      <span>{{ file.name }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Video Streaming App</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon favorite-icon" >
+      <mat-icon>upload_file</mat-icon>
+    </button>
+
+    <button *ngIf="isAutenticated$ |async;else islogin" mat-icon-button class="example-icon" >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <ng-template #islogin>
+      <button  mat-icon-button class="example-icon" (click)="login()">Login</button>
+    </ng-template>
+  </mat-toolbar>

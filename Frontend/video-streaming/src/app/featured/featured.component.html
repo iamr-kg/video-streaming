@@ -1,0 +1,8 @@
+<div style="display: flex;flex-direction: column;">
+  <h2>Videos</h2>
+  <div class="flexLayout">
+    <div class="flexItem" *ngFor="let vid of featuredeVideos">
+      <app-video-card [video]="vid"></app-video-card>
+    </div>
+  </div>
+</div>

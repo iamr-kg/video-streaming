@@ -1,0 +1,12 @@
+.flexLayout{
+    display: flex;
+    justify-content: center;
+}
+
+flexItem{
+    text-align: center;
+}
+displayVideo{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

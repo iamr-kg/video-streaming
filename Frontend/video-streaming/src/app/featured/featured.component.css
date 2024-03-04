@@ -1,0 +1,11 @@
+.flexLayout{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.flexItem{
+    
+    flex-basis: 33.33%;
+}
+
+
