@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Subscription {
     @EmbeddedId
-    private SubscriptionId user;
+    private SubscriptionId subscriptionId;
 
     @Column(name = "is_active")
     private boolean isActive;

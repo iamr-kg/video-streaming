@@ -19,7 +19,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-    @Value("${auth0.audience}")
+    @Value("${spring.security.oauth2.resourceserver.jwt.audiences}")
     private String audience;
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
@@ -33,10 +33,11 @@ public class SecurityConfig {
                     configuration.setAllowedHeaders(List.of("*"));
                     return configuration;
                 }))
-                .authorizeHttpRequests((authz) -> authz.requestMatchers("/vsa/**").authenticated()
-                ).oauth2ResourceServer(server-> server.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())))
-                .httpBasic(withDefaults());
-
+                .authorizeHttpRequests((authz) -> authz.requestMatchers("/vsa/users/welcome").permitAll())
+                .authorizeHttpRequests((authz) -> authz.requestMatchers("/vsa/**").authenticated()).
+                oauth2ResourceServer(oAuth -> oAuth.jwt(
+                        jwt -> jwt.decoder(jwtDecoder())
+        ));
         return http.build();
     }
     JwtDecoder jwtDecoder() {
@@ -46,8 +47,10 @@ public class SecurityConfig {
         OAuth2TokenValidator<Jwt> audienceValidator = (jwt)-> {
                 OAuth2Error error = new OAuth2Error("invalid_token",
                         "The required audience is missing", null);
-                if (jwt.getAudience().contains(audience)) {
-                    return OAuth2TokenValidatorResult.success();
+                for(String aud:audience.split(",")) {
+                    if (jwt.getAudience().contains(aud)) {
+                        return OAuth2TokenValidatorResult.success();
+                    }
                 }
                 return OAuth2TokenValidatorResult.failure(error);
             };

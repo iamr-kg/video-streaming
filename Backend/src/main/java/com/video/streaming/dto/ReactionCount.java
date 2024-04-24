@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ReactionCount {
 private long likeCount;
 private long disLikeCount;
+public int reactionByUser;
 }

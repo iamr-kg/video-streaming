@@ -15,7 +15,6 @@ public class VideoUserCompositeId implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "video_id")
     private Video video;
-
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;

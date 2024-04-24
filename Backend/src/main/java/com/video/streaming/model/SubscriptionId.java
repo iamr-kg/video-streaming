@@ -19,7 +19,4 @@ public class SubscriptionId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "subscribed_to_id")
     private User subscribedToId;
-
-
-
 }

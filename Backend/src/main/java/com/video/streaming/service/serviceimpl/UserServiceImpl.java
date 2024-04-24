@@ -2,15 +2,14 @@ package com.video.streaming.service.serviceimpl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.video.streaming.dto.AuthUserDto;
-import com.video.streaming.dto.ReactionCount;
-import com.video.streaming.dto.ReactionType;
-import com.video.streaming.dto.VideoDto;
+import com.video.streaming.dto.*;
 import com.video.streaming.model.*;
 import com.video.streaming.repository.*;
 import com.video.streaming.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,10 +23,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     @Value("${auth0.userInfoEndpoint}")
     private String userInfoEndpoint;
     private final UserRepository userRepository;
@@ -48,10 +50,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find user with sub - " + sub));
     }
     @Override
-    public long register(AuthUserDto authDetails) {
+    public UserDto register(AuthUserDto authDetails) {
         try {
             Optional<User> userIfPresent = userRepository.findByEmailAddress(authDetails.getEmail());
-            if (userIfPresent.isPresent()) return userIfPresent.get().getId();
+            if (userIfPresent.isPresent()) return modelMapper.map(userIfPresent.get(),UserDto.class);
             var user = new User();
             user.setSub(authDetails.getSub());
             user.setEmailAddress(authDetails.getEmail());
@@ -60,7 +62,8 @@ public class UserServiceImpl implements UserService {
             user.setFullName(authDetails.getName());
             user.setPicture(authDetails.getPicture());
             User savedUser = userRepository.save(user);
-            return savedUser.getId();
+            log.atError().log("Registered user to DB");
+            return modelMapper.map(savedUser,UserDto.class);
         }catch(Exception e){
             throw new RuntimeException("Exception Occurred when registering user");
         }
@@ -80,10 +83,10 @@ public class UserServiceImpl implements UserService {
             reactionObject = new VideoReaction(primary, ReactionType.valueOf(reaction).getReactionNumber());
             videoReactionRepository.save(reactionObject);
         }
-        long likeCount = videoReactionRepository.getLikesCountForVideo(Long.parseLong(videoId));
-        long disLikeCount = videoReactionRepository.getDisLikesCountForVideo(Long.parseLong(videoId));
-
-        return new ReactionCount(likeCount,disLikeCount);
+        ReactionCount reactionCount = new ReactionCount();
+         reactionCount.setLikeCount(videoReactionRepository.getLikesCountForVideo(Long.parseLong(videoId)));
+        reactionCount.setDisLikeCount(videoReactionRepository.getDisLikesCountForVideo(Long.parseLong(videoId)));
+        return reactionCount;
     }
 
     @Override
@@ -98,16 +101,19 @@ public class UserServiceImpl implements UserService {
                 ()-> {throw new IllegalArgumentException("User cannot be found");});
     }
 
-    @Override
-    public void unSubscribeTo(String userId) {
+    public Optional<Subscription> getSubscriptionDetails(String userId){
         User loginUser = getCurrentUser();
         Optional<User> subscriptionUserOptional = userRepository.findById(Long.parseLong(userId));
         if(subscriptionUserOptional.isEmpty()){
             throw new IllegalArgumentException("User cannot be found");
         }
         SubscriptionId primary = new SubscriptionId(loginUser,subscriptionUserOptional.get());
-        Optional<Subscription> subscriptionOptional = subscriptionRepository.findById(primary);
-        subscriptionOptional.ifPresentOrElse((subscription -> {
+        return subscriptionRepository.findById(primary);
+    }
+    @Override
+    public void unSubscribeTo(String userId) {
+
+        getSubscriptionDetails(userId).ifPresentOrElse((subscription -> {
             subscription.setActive(false);
             subscriptionRepository.save(subscription);
         }),()-> {throw new IllegalArgumentException("Subscription cannot be found");});
@@ -143,5 +149,35 @@ public class UserServiceImpl implements UserService {
             Video watchHistoryVideo = watchHistory.getId().getVideo();
             return modelMapper.map(watchHistoryVideo,VideoDto.class);
         }).toList();
+    }
+
+    @Override
+    public List<UserDto> getAllSubscription() {
+        User user = getCurrentUser();
+        List<Subscription> subscriptions =  subscriptionRepository.findAllBySubscriptionIdSubscriberId(user);
+
+        if(subscriptions.isEmpty()){
+            return null;
+        }
+        return subscriptions.stream().map(subscription -> modelMapper.map(subscription.getSubscriptionId().getSubscribedToId(), UserDto.class)).toList();
+    }
+
+    @Override
+    public boolean isSubscribedTo(long userId) {
+        User loginUser = getCurrentUser();
+
+        int subscription = subscriptionRepository.isActivelySubscribedTo(Long.toString(loginUser.getId()),Long.toString(userId));
+        if(subscription >0) return true;
+        return false;
+    }
+
+    @Override
+    public List<VideoDto> getUserLikedVideos() {
+        User user = getCurrentUser();
+        List<VideoReaction> likedVideos =  videoReactionRepository.findAllByIdUserId(user.getId());
+        if(likedVideos.isEmpty()){
+            return null;
+        }
+        return likedVideos.stream().map(reaction -> modelMapper.map(reaction.getId().getVideo(), VideoDto.class)).collect(Collectors.toList());
     }
 }

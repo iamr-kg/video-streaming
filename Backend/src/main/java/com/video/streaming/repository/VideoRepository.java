@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VideoRepository extends JpaRepositoryImplementation<Video,Long>, CrudRepository<Video,Long> {
+public interface VideoRepository extends JpaRepository<Video,Long> {
 }

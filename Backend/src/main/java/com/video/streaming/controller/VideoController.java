@@ -1,6 +1,7 @@
 package com.video.streaming.controller;
 
 import com.video.streaming.dto.CommentDto;
+import com.video.streaming.dto.ReactionCount;
 import com.video.streaming.dto.VideoDto;
 import com.video.streaming.service.CommentService;
 import com.video.streaming.service.serviceimpl.VideoService;
@@ -30,7 +31,7 @@ public class VideoController {
     }
 
     @PostMapping("/uploadVideo")
-    public ResponseEntity<VideoDto> uploadVideo(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<VideoDto> uploadVideo(@RequestPart("file") MultipartFile file) {
         VideoDto video;
         try {
             video = videoService.uploadVideo(file);
@@ -76,10 +77,10 @@ public class VideoController {
         return new ResponseEntity<VideoDto>(videoDetails, HttpStatus.CREATED);
     }
 
-    @PostMapping("comment/{videoId}")
-    public ResponseEntity<CommentDto> addComment(@PathVariable("videoId") String videoId,@RequestBody CommentDto comment) {
+    @PostMapping("postComment")
+    public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto comment) {
         try {
-            CommentDto savedComment = commentService.addComment(Long.parseLong(videoId),comment);
+            CommentDto savedComment = commentService.addComment(comment);
             return new ResponseEntity<>(savedComment, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -87,22 +88,53 @@ public class VideoController {
     }
 
     @GetMapping("allComments/{videoId}")
-    public ResponseEntity<List<CommentDto>> getAllComments(@PathVariable("videoId") String videoId){
-        try{
+    public ResponseEntity<List<CommentDto>> getAllComments(@PathVariable("videoId") String videoId) {
+        try {
             List<CommentDto> savedComment = commentService.getComments(Long.parseLong(videoId));
-            return new ResponseEntity<>(savedComment,HttpStatus.CREATED);
-        }catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+            return new ResponseEntity<>(savedComment, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @GetMapping("getAllVideos")
-    public ResponseEntity<List<VideoDto>> getAllVideos(){
-        try{
+    public ResponseEntity<List<VideoDto>> getAllVideos() {
+        try {
             List<VideoDto> videoList = videoService.getAllVideos();
-            return new ResponseEntity<>(videoList,HttpStatus.CREATED);
-        }catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+            return new ResponseEntity<>(videoList, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @GetMapping("getVideoReactionCount/{videoId}")
+    public ResponseEntity<ReactionCount> getVideoReactionCount(@PathVariable("videoId") String videoId) {
+        try {
+            ReactionCount reaction = videoService.getVideoReactionCount(Long.parseLong(videoId));
+            return new ResponseEntity<>(reaction, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("likeVideo/{videoId}")
+    public ResponseEntity<ReactionCount> likeVideo(@PathVariable("videoId") String videoId) {
+        try {
+            ReactionCount reactionCount = videoService.likeVideo(Long.parseLong(videoId));
+            return new ResponseEntity<>(reactionCount, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("disLikeVideo/{videoId}")
+    public ResponseEntity<ReactionCount> disLikeVideo(@PathVariable("videoId") String videoId) {
+        try {
+            ReactionCount reactionCount = videoService.disLikeVideo(Long.parseLong(videoId));
+            return new ResponseEntity<>(reactionCount, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
 }
