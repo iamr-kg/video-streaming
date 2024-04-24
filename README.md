@@ -16,7 +16,8 @@
 
 1. User can view the History of Videos he/she watched
 
-1. User can Login/Logout using Single Sign On
+1. User can Login/Logout using Single Sign On and can also sign up using an email address.
+
 
 DB Diagaram: 
 
