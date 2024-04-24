@@ -1,3 +1,5 @@
+import { Video } from '../models/Video';
+import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent implements OnInit {
-
-  constructor() { }
+  historyVideos!:Array<Video>
+  constructor(private userService:UserService) { }
 
   ngOnInit(): void {
+    this.userService.getHistory().subscribe((videos)=>{
+      this.historyVideos = videos;
+    })
   }
 
 }

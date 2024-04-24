@@ -1,5 +1,5 @@
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -8,12 +8,13 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  isAutenticated$: any;
+  isAutenticated: boolean = false;
 
-  constructor(public authService:AuthService) { }
+  constructor(public authService:AuthService,private cd:ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.isAutenticated$ = this.authService.isAuthenticated();
+     this.authService.isAuthenticated().subscribe((value)=> {this.isAutenticated = value
+     console.log(this.isAutenticated)});
   }
 
   logout() {

@@ -1,17 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-
-  constructor(private router:Router) { }
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.router.navigateByUrl("featured")
+    this.authService.isAuthenticated().subscribe((result) => {
+      if (result) {
+        this.router.navigateByUrl('featured');
+        return;
+      }
+      this.router.navigateByUrl('loginpage');
+    });
   }
-
 }

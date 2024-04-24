@@ -8,22 +8,58 @@ import { FeaturedComponent } from './featured/featured.component';
 import { HistoryComponent } from './history/history.component';
 import { SubscriptionComponent } from './subscription/subscription.component';
 import { LikedVideosComponent } from './liked-videos/liked-videos.component';
+import { CallbackComponent } from './callback/callback.component';
+import { AuthguardService } from './services/authguard.service';
+import { LoginpageComponent } from './loginpage/loginpage.component';
 
-const routes: Routes = [{path:"upload",component:UploadVideoComponent},
-{path:"video-details/:videoId",component:VideoDetailsComponent},
-{path:"",component:HomeComponent,children:[{
-  path:"featured",component:FeaturedComponent
-},{
-  path:"history",component:HistoryComponent
-},{
-  path:"subscription",component:SubscriptionComponent
-},{
-  path:"liked",component:LikedVideosComponent,
-}]},
-{path:"display-video/:videoId",component:DisplayVideoComponent}];
+const routes: Routes = [
+  { path: 'upload', component: UploadVideoComponent },
+  {
+    path: 'video-details/:videoId',
+    component: VideoDetailsComponent,
+    canActivate: [AuthguardService],
+  },
+  {
+    path: 'callback',
+    component: CallbackComponent,
+  },
+  {
+    path: 'display-video/:videoId',
+    component: DisplayVideoComponent,
+    canActivate: [AuthguardService],
+  },
+  {
+    path: '',
+    component: HomeComponent,
+    canActivateChild: [AuthguardService],
+    children: [
+      {
+        path: 'featured',
+        component: FeaturedComponent,
+      },
+      {
+        path: 'history',
+        component: HistoryComponent,
+      },
+      {
+        path: 'subscription',
+        component: SubscriptionComponent,
+      },
+      {
+        path: 'liked',
+        component: LikedVideosComponent,
+      },
+      {
+        path: 'loginpage',
+        component: LoginpageComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthguardService],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

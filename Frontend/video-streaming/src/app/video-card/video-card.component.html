@@ -1,10 +1,10 @@
 
-<mat-card class="example-card" routerLink="/video-details/{{video.videoId}}">
+<mat-card class="example-card" routerLink="/display-video/{{video.videoId}}">
     <img mat-card-image  alt="Thumbnail" [src]="video.thumbnailUrl">
     <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
+      <img mat-card-avatar [src]="userPicture">
       <mat-card-title>{{video.title}}</mat-card-title>
-      <mat-card-subtitle>Rohan G</mat-card-subtitle>
-      <mat-card-subtitle>1 views</mat-card-subtitle>
+      <mat-card-subtitle>{{video.user?.fullName}}</mat-card-subtitle>
+      <mat-card-subtitle>{{video.viewCount}} Views</mat-card-subtitle>
     </mat-card-header>
   </mat-card>

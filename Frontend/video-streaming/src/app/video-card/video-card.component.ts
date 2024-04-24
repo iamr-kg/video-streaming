@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Video } from '../models/Video';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-video-card',
@@ -8,10 +9,12 @@ import { Video } from '../models/Video';
 })
 export class VideoCardComponent implements OnInit {
   @Input() video!:Video;
+  userPicture!:string;
 
-  constructor() { }
+  constructor(private userService:UserService) { }
 
   ngOnInit(): void {
+    this.userPicture = <string>sessionStorage.getItem('userPicture');
   }
 
 }

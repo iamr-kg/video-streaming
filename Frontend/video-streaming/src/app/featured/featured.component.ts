@@ -8,12 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./featured.component.css']
 })
 export class FeaturedComponent implements OnInit {
-  featuredeVideos:Array<Video> = [];
+  featuredVideos:Array<Video> = [];
   constructor(private videoService:VideoService) { }
 
   ngOnInit(): void {
     this.videoService.getAllVideos().subscribe({next:(values)=> {
-      this.featuredeVideos = values;
+      this.featuredVideos = values;
     },
     })
   }

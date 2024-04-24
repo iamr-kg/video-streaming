@@ -24,7 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { VideoPlayerComponent } from './video-player/video-player.component';
 import { AuthConfigModule } from './auth/auth-config.module';
-import { AuthInterceptor, AutoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { AuthInterceptor,  } from 'angular-auth-oidc-client';
 import { DisplayVideoComponent } from './display-video/display-video.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -36,7 +36,11 @@ import { HomeComponent } from './home/home.component';
 import { MatListModule } from '@angular/material/list';
 import { VideoCardComponent } from './video-card/video-card.component';
 import { MatCardModule } from '@angular/material/card';
-
+import { CallbackComponent } from './callback/callback.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommentsComponent } from './comments/comments.component';
+import { LoginpageComponent } from './loginpage/loginpage.component';
+import { VideoStackComponent } from './video-stack/video-stack.component';
 @NgModule({
   schemas: [],
   declarations: [
@@ -54,6 +58,10 @@ import { MatCardModule } from '@angular/material/card';
     LikedVideosComponent,
     SubscriptionComponent,
     VideoCardComponent,
+    CallbackComponent,
+    CommentsComponent,
+    LoginpageComponent,
+    VideoStackComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,6 +85,7 @@ import { MatCardModule } from '@angular/material/card';
     MatSidenavModule,
     MatListModule,
     MatCardModule,
+    MatMenuModule
   ],
 
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],
