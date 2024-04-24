@@ -1,0 +1,79 @@
+.flexLayout{
+    display: flex;
+    justify-content: center;
+    padding-left: 4px;
+}
+
+.flexItem{
+    text-align: center;
+}
+.displayVideo{
+  display: flex;
+  flex-flow: column;
+  justify-content: space-evenly;
+  row-gap: 5px;
+}
+
+
+.video-detail-header{
+    padding-top: 15px;
+  }
+  
+  .video-detail{
+    margin-top: 40px;
+    margin-left: 100px;
+  }
+  
+  .subtitles{
+    justify-content: space-between;
+  }
+  
+  mat-card[ng-reflect-router-link] {
+    cursor: pointer;
+  }
+  
+  .suggestion-bar {
+    margin-top: 10px;
+  }
+  
+  .view-count {
+    padding-right: 5px;
+    font-weight: 500;
+  }
+  
+  .dot {
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    background-color: black;
+    display: inline-block;
+  }
+  
+  .video-upload-date{
+    padding-left: 5px;
+  }
+  
+  .thumbs-down {
+    padding-left: 15px;
+  }
+  
+  .like-dislike-section {
+    padding-right: 10px;
+    margin-left: auto;
+  }
+
+  .app-video-player{
+    flex-basis: 60%;
+  }
+  .subscribe-button {
+    height: 40px;
+    justify-content: right;
+  }
+  
+  .subscribe-button-clicked {
+    background-color: gray;
+    height: 40px;
+
+  }
+  
+  

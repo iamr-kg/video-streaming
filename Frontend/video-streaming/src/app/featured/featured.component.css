@@ -1,0 +1,12 @@
+.flexLayout{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap:5% 2%;
+
+}
+.flexItem{
+    flex-basis: 32%;
+}
+
+

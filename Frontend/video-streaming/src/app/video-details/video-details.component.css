@@ -1,0 +1,22 @@
+.flexLayout{
+    display: flex;
+    justify-content: center;
+}
+
+flexItem{
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width:70%
+}
+input[type='file']{
+    color: rgba(0, 0, 0, 0)
+}
+button{
+    margin: 10px;
+}
+

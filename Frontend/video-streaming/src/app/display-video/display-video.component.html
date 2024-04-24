@@ -1,0 +1,51 @@
+<div class="flexLayout">
+  <div
+    *ngIf="videoAvailable"
+    class="displayVideo"
+    style="margin-top: 10px"
+  >
+    <app-video-player  [videoUrl]="this.videoUrl"></app-video-player>
+    <div class="mat-title">{{ videoDetails.title }}</div>
+    <div style="display: flex;align-items: baseline;">
+      <span class="view-count">{{ videoDetails.viewCount }} views</span>
+      <span class="video-upload-date">{{videoDetails.uploadDate}}</span>
+      <div class="like-dislike-section">
+        <span>
+          <button mat-icon-button class="thumbs-up" [ngClass]="{'reaction-clicked' : UserReaction == 1}" (click)="likeVideo()">
+            <mat-icon>thumb_up_off_alt</mat-icon>
+            {{ likeCount }}
+          </button>
+          <button mat-icon-button class="thumbs-down"  [ngClass]="{'reaction-clicked' : UserReaction == -1}"(click)="disLikeVideo()">
+            <mat-icon>thumb_down_off_alt</mat-icon>
+            {{ disLikeCount }}
+          </button>
+        </span>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div >
+     <mat-card-header >
+        <mat-card-title>{{videoDetails.user?.fullName}}</mat-card-title>
+        <mat-card-subtitle class="subtitles">4.2K Subscribers</mat-card-subtitle>
+        <button *ngIf="showSubscribeButton" class="subscribe-button" mat-raised-button color="warn"
+                (click)="subscribeToUser()">SUBSCRIBE
+        </button>
+        <button *ngIf="!showSubscribeButton" class="subscribe-button-clicked"
+                mat-raised-button color="accent"
+                (click)="unSubscribeToUser()">
+          UNSUBSCRIBE
+        </button>
+      </mat-card-header> 
+    </div>
+      <div>{{videoDetails.description}}</div>
+      <mat-divider></mat-divider>
+      <mat-chip-list>
+        <mat-chip>Spring Boot</mat-chip>
+        <mat-chip>Angular</mat-chip>
+      </mat-chip-list>
+      <mat-divider></mat-divider>
+      <app-comments [video]="videoDetails"></app-comments>
+  </div>
+  <div style="width: 5%;"></div>
+  <div class="flexItem" style="width: 30%">Suggestions</div>
+</div>

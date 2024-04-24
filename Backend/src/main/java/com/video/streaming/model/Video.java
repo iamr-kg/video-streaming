@@ -1,29 +1,42 @@
 package com.video.streaming.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.List;
-import java.util.Set;
 
-@Document(value = "Video")
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static jakarta.persistence.GenerationType.SEQUENCE;
+@Entity
+@Table(name="video")
+@Embeddable
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Video {
+public class Video implements Serializable {
     @Id
-    private String id;
+    @GeneratedValue(strategy = SEQUENCE,generator = "video_app_generator")
+    @SequenceGenerator(name="video_app_generator",initialValue = 3,allocationSize = 25)
+    @Column(name="video_id")
+    private long videoId;
+    @Column(name="file_name")
+    private String fileName;
+    @Column(name="title")
     private String title;
+    @Column(name="description")
     private String description;
-    private Integer like;
-    private Integer dislike;
+    @Column(name="video_url")
     private String videoUrl;
+    @Column(name="thumbnail_url")
     private String thumbnailUrl;
-    private Set<String> tags;
-    private VideoStatus videoStatus;
-    private String viewsCount;
-    private List<Comment> commentList;
+    private String tags;
+    @Column(name="video_status")
+    private String videoStatus;
+    @ManyToOne()
+    @JoinColumn(name="user_id",referencedColumnName = "user_id")
+    private User user;
+    private LocalDateTime uploadDate;
+   // private AtomicLong viewCount;
+
+
 }
